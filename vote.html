@@ -1,0 +1,150 @@
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <title>Diamond City | Accueil</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <meta name="description" content="Diamond City est un serveur GTA RP ouvert à tous, sur Fivem.">
+	    <meta name="author" content="">
+	    <meta property="og: typeborder:5px solid " content="Diamond City">
+	    <meta property="og:url" content="index.html">
+	    <meta property="og:title" content="Diamond City | Acceuil">
+	    <meta property="og:description" content="Diamond City est un serveur GTA RP ouvert à tous, sur Fivem.">
+        <meta property="og:image" content="assets/img/logo.png">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+        <script src="https://kit.fontawesome.com/a4cacc32f2.js" crossorigin="anonymous"></script>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap" rel="stylesheet">
+        <link rel="shortcut icon" href="assets/img/logo.png">
+        <!-- CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+        <link rel="stylesheet" href="assets/css/base.css">
+        <link rel="stylesheet" href="assets/css/header.css">
+        <link rel="stylesheet" href="assets/css/main.css">
+        <link rel="stylesheet" href="assets/css/footer.css">
+    </head>
+    <body>
+        <div class="header">
+            <div class="header__texture"></div> border:5px solid 
+            <div class="container">
+                <div class="header__navbar">
+                    <div class="header__navbar--logo">
+                        <img alt="logo text" width="170" height="100" src="assets/img/logo.png" class="header__navbar--logo-title">
+                    </div>
+                    <div class="header__navbar--menu">
+                        <a href="/" class="header__navbar--menu-link"><i class="fas fa-home"></i> Accueil</a>
+                        <a href="https://www.paypal.com/paypalme/DiamondCityrpfr" class="header__navbar--menu-link"><i class="fas fa-shopping-cart"></i> Don</a>
+                        <a href="https://docs.google.com/document/d/1B58h4zEOzVJ3w7q1lyFIH8JeVRi5wASmdibGFqBEJe8/edit?usp=sharing" target="_blank" class="header__navbar--menu-link"><i class="fas fa-bookmark"></i> Règlement</a>
+                        <a href="https://discord.gg/DiamondCityRP" target="_blank" class="header__navbar--menu-link"><i class="fab fa-discord"></i> Discord</a>
+                        <a href="/vote" class="header__navbar--menu-link"><i class="fas fa-vote-yea"></i> Vote</a>
+                    </div>
+                    <div class="header__navbar--toggle">
+                        <span class="header__navbar--toggle-icons"></span>
+                    </div>
+                </div>
+                <div class="header__slogan">
+                    <h1 class="h__slogan--title">Diamond City</h1>
+                    <h2 class="h__slogan--btn">Free Access - 1024 slots</h2>
+                </div>
+            </div>
+            <div class="wave wave1"></div>
+        </div>
+        <div class="main-content-top">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-6 col-md-8" style="color:white !important">
+                        
+						<h1>Classement des votants</h1>
+						<h3 class="questions__title">Voici le classement du mois</h3>
+                            <p>Merci à tous ceux qui votent et contribuent au développement du serveur !</p>
+					</div>
+					<div class="col-6 col-md-4">
+                        <div class="img_pc">
+						<img width="500" src="assets/img/logo-text.png">
+                    </div>
+					</div>
+				</div>
+			</div>
+		</div>
+               
+        <div id="app" style="display: none;">            
+            
+            <center><h4 style="color:#FFFF;">            
+            
+            <div class="rank container-card" style="display: flex; flex-direction: column; max-width: max-content; margin: auto; text-align: left; border:5px solid #b840dd; box-shadow: 0 0 2em #b840dd; padding:15px">
+            
+                <template v-for="(voter, i) of voters">
+                    <div class="voter">
+                        {{ i + 1 }} - {{ voter.playername }} - {{ voter.votes }}
+                        <i style="color:#b840dd" v-if="i === 0" class="fas fa-crown"></i>
+                    </div>
+                </template>
+            </div>            
+            
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+        
+        <script>
+            
+            
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    ranking: null,
+                    server: null,
+                    players: null,
+                    fivem: {},
+                    id: '395ydo'
+                },
+                mounted() {
+                    this.refresh();
+                    setInterval(() => this.refresh(), 30000);	
+                },
+                methods: {
+                    async refresh() {
+                        await Promise.all([
+                            fetch('https://api.top-serveurs.net/v1/servers/6M2I5JP3QD/players-ranking')
+                                .then(r => r.json())
+                                .then(json => this.ranking = json),
+                            /*fetch('https://api.top-serveurs.net/v1/servers/X6NTP6M4FL/full')
+                                .then(r => r.json())
+                                .then(json => this.server = json),*/
+                            /*fetch('https://servers-frontend.fivem.net/api/servers/single/'+this.id)
+                                .then(r => r.json())
+                                .then(json => this.fivem = json),*/
+                            fetch('/api/players.json')
+                                .then(r => r.json())
+                                .then(json => this.players = json),
+                            fetch('/api/info.json')
+                                .then(r => r.json())
+                                .then(json => this.server = json),
+                        ])
+                    }
+                },
+                computed: {
+                    host() {
+                        return window.location.host;	
+                    },
+                    voters() {
+                        return this.ranking && this.ranking.players ? this.ranking.players
+                            .filter(p => !!p.playername)
+                        : [];
+                    },
+                    online() {
+                        return !!this.server;
+                    },
+                    nbJoueur() {
+                        return this.players ? this.players.length : null;
+                    },
+                    maxSlot() {
+                        return this.server && this.server.vars && this.server.vars.sv_maxClients ? this.server.vars.sv_maxClients: null;
+                    }
+                }
+            });
+            document.getElementById('app').style.display = '';
+            
+        </script>
+        </h1></center>
+    </body>
+    </html>
